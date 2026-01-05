@@ -1,0 +1,297 @@
+import React, { useState } from 'react';
+import { 
+  Clock, 
+  ArrowRight, 
+  CheckCircle2, 
+  AlertCircle, 
+  Zap, 
+  Users, 
+  FileText, 
+  Monitor, 
+  Smartphone,
+  ChevronRight,
+  Target
+} from 'lucide-react';
+
+const App = () => {
+  const [view, setView] = useState('comparison'); // 'comparison', 'metrics'
+
+  const stages = [
+    { 
+      id: 'qualify', 
+      name: '1. Lead Qualify', 
+      oldTime: '2 Days', 
+      newTime: '< 1 Day', 
+      oldMethod: 'Manual checking', 
+      newMethod: 'Lead Scoring Framework' 
+    },
+    { 
+      id: 'meeting', 
+      name: '2. Sales Meetings', 
+      oldTime: '14-21 Days', 
+      newTime: '7-10 Days', 
+      oldMethod: 'Physical Meetings only', 
+      newMethod: 'Hybrid (Online then On-site)' 
+    },
+    { 
+      id: 'quote', 
+      name: '3. Quote & BOQ', 
+      oldTime: '7 Days', 
+      newTime: '1-2 Days', 
+      oldMethod: 'Manual BOQ calculation', 
+      newMethod: 'BOQ Calculator Tool' 
+    },
+    { 
+      id: 'followup', 
+      name: '4. Follow-up', 
+      oldTime: '14 Days', 
+      newTime: '3-5 Days', 
+      oldMethod: 'Manual tracking', 
+      newMethod: 'Auto-reminder System' 
+    },
+  ];
+
+  const MetricCard = ({ title, oldVal, newVal, unit, color }) => (
+    <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+      <div className="text-slate-400 text-sm mb-2">{title}</div>
+      <div className="flex items-end gap-3">
+        <div className="text-3xl font-bold text-slate-300 line-through opacity-50">{oldVal}</div>
+        <ArrowRight className="mb-2 text-slate-500" size={18} />
+        <div className={`text-4xl font-black ${color}`}>{newVal}</div>
+        <div className="mb-1 text-slate-400 text-sm">{unit}</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-900 text-slate-100 p-8 font-sans">
+      {/* Header */}
+      <div className="max-w-7xl mx-auto mb-12 flex justify-between items-end">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="bg-lime-400 w-3 h-3 rounded-full animate-pulse" />
+            <span className="text-lime-400 font-bold tracking-widest text-sm uppercase">Optimization Strategy</span>
+          </div>
+          <h1 className="text-5xl font-black">Sales Workflow <span className="text-lime-400">2.0</span></h1>
+          <p className="text-slate-400 mt-4 text-lg max-w-2xl">
+            ข้อเสนอการปรับปรุงกระบวนการขายเพื่อลดระยะเวลา Sales Cycle และเพิ่มโอกาสการปิดงาน (Lead-to-Win Ratio)
+          </p>
+        </div>
+        
+        <div className="flex gap-2 bg-slate-800 p-1 rounded-xl">
+          <button 
+            onClick={() => setView('comparison')}
+            className={`px-6 py-2 rounded-lg font-bold transition-all ${view === 'comparison' ? 'bg-lime-400 text-slate-900' : 'text-slate-400 hover:text-white'}`}
+          >
+            Workflow Canvas
+          </button>
+          <button 
+            onClick={() => setView('metrics')}
+            className={`px-6 py-2 rounded-lg font-bold transition-all ${view === 'metrics' ? 'bg-lime-400 text-slate-900' : 'text-slate-400 hover:text-white'}`}
+          >
+            Efficiency Data
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto">
+        {view === 'metrics' ? (
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <MetricCard title="Total Sales Cycle Time" oldVal="45" newVal="15" unit="Days" color="text-lime-400" />
+              <MetricCard title="Quotation Speed" oldVal="7" newVal="1" unit="Day" color="text-sky-400" />
+              <MetricCard title="Lead Capacity" oldVal="10" newVal="25" unit="Leads/Sales" color="text-purple-400" />
+            </div>
+
+            <div className="bg-slate-800/30 rounded-3xl border border-slate-700 p-8">
+              <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <Zap className="text-lime-400" /> Key Efficiency Improvements
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {stages.map((s) => (
+                  <div key={s.id} className="flex gap-6 p-6 bg-slate-800/50 rounded-2xl border border-slate-700/50">
+                    <div className="w-12 h-12 bg-lime-400/10 rounded-xl flex items-center justify-center shrink-0">
+                      <CheckCircle2 className="text-lime-400" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-xl mb-1">{s.name}</h4>
+                      <p className="text-slate-400 text-sm mb-3">จาก {s.oldMethod} เป็น {s.newMethod}</p>
+                      <div className="inline-flex items-center gap-2 bg-lime-400/10 text-lime-400 px-3 py-1 rounded-full text-xs font-bold">
+                        <Clock size={12} /> ประหยัดเวลาได้ {parseInt(s.oldTime) - parseInt(s.newTime) || '60%'} 
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* Swimlane Container */}
+            <div className="overflow-x-auto pb-8">
+              <div className="min-w-[1000px]">
+                
+                {/* Swimlane Legend */}
+                <div className="flex mb-4 px-4 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                  <div className="w-1/4">Customer</div>
+                  <div className="w-1/4">Sales Team</div>
+                  <div className="w-1/4">Operations / Design</div>
+                  <div className="w-1/4">Finance / Admin</div>
+                </div>
+
+                {/* CURRENT STATE */}
+                <div className="mb-12">
+                  <h3 className="text-rose-400 font-bold mb-4 px-4 flex items-center gap-2 italic">
+                    <AlertCircle size={18} /> AS-IS PROCESS (เดิม: มีคอขวดและจุดรอคอยมาก)
+                  </h3>
+                  <div className="relative p-6 bg-rose-950/20 border-2 border-rose-900/30 rounded-3xl space-y-6">
+                    <div className="flex items-center gap-4">
+                      {/* Lane 1: Customer */}
+                      <div className="w-1/4 flex flex-col items-center">
+                        <div className="w-full h-24 bg-rose-900/40 border border-rose-800 p-3 rounded-xl text-center flex items-center justify-center text-sm">ติดต่อสอบถาม</div>
+                      </div>
+                      <div className="w-1/4 flex flex-col items-center">
+                        <ArrowRight className="text-rose-900 mb-2" />
+                        <div className="w-full h-24 bg-rose-900/40 border border-rose-800 p-3 rounded-xl text-center flex flex-col items-center justify-center text-sm">
+                          <Users size={16} className="mb-1 opacity-50" />
+                          Meeting 1 (On-site)
+                        </div>
+                      </div>
+                      <div className="w-1/4" />
+                      <div className="w-1/4" />
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-1/4" />
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                         <div className="h-10 w-px bg-rose-800" />
+                        <div className="w-full h-24 border-2 border-rose-500 border-dashed bg-rose-500/10 p-3 rounded-xl text-center flex items-center justify-center text-xs font-bold animate-pulse text-rose-300">
+                          🔴 BOTTLE NECK<br/>รอคิวถอดราคา Manual (7 วัน)
+                        </div>
+                      </div>
+                      <div className="w-1/4" />
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                        <div className="w-full h-24 bg-rose-900/40 border border-rose-800 p-3 rounded-xl text-center flex items-center justify-center text-sm">ส่ง Quotation</div>
+                      </div>
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                        <ArrowRight className="text-rose-900 mb-2" />
+                        <div className="w-full h-24 bg-rose-900/40 border border-rose-800 p-3 rounded-xl text-center flex items-center justify-center text-sm">วางบิล (รอระบบ)</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* NEW STATE */}
+                <div>
+                  <h3 className="text-lime-400 font-bold mb-4 px-4 flex items-center gap-2 uppercase tracking-tight">
+                    <Zap size={18} /> TO-BE PROCESS (ใหม่: รวดเร็วด้วยระบบ Digital)
+                  </h3>
+                  <div className="relative p-6 bg-lime-950/20 border-2 border-lime-400/30 rounded-3xl space-y-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-1/4 flex flex-col items-center">
+                        <div className="w-full h-24 bg-lime-400/20 border border-lime-400/50 p-3 rounded-xl text-center flex items-center justify-center text-sm font-bold shadow-lg shadow-lime-400/5">Inquiry & Qualify</div>
+                      </div>
+                      <div className="w-1/4 flex flex-col items-center">
+                        <ArrowRight className="text-lime-400/50 mb-2" />
+                        <div className="w-full h-24 bg-slate-800 border border-lime-400/50 p-3 rounded-xl text-center flex flex-col items-center justify-center text-sm group hover:border-lime-400 transition-all">
+                          <Monitor size={16} className="mb-1 text-lime-400" />
+                          Meeting 1 (Online)
+                        </div>
+                      </div>
+                      <div className="w-1/4" />
+                      <div className="w-1/4" />
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                         <div className="h-6 w-px bg-lime-400/30" />
+                        <div className="w-full h-24 bg-slate-800 border border-lime-400/50 p-3 rounded-xl text-center flex flex-col items-center justify-center text-sm">
+                          <Users size={16} className="mb-1 text-lime-400" />
+                          Meeting 2 (On-site)
+                        </div>
+                      </div>
+                      <div className="w-1/4 flex flex-col items-center">
+                         <div className="h-6 w-px bg-lime-400/30" />
+                        <div className="w-full h-24 bg-lime-400 text-slate-900 p-3 rounded-xl text-center flex flex-col items-center justify-center text-xs font-bold shadow-xl">
+                          🛠️ BOQ CALCULATOR<br/>(Done in 1-2 Days)
+                        </div>
+                      </div>
+                      <div className="w-1/4" />
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                         <div className="h-6 w-px bg-lime-400/30" />
+                        <div className="w-full h-24 bg-slate-800 border border-lime-400/50 p-3 rounded-xl text-center flex flex-col items-center justify-center text-sm font-bold">
+                          Quick Quote & Follow
+                        </div>
+                      </div>
+                      <div className="w-1/4" />
+                      <div className="w-1/4 flex flex-col items-center">
+                        <ArrowRight className="text-lime-400/50 mb-2" />
+                        <div className="w-full h-24 bg-slate-800 border border-lime-400/50 p-3 rounded-xl text-center flex flex-col items-center justify-center text-sm">
+                           <Smartphone size={16} className="mb-1 text-lime-400" />
+                           Online Deposit / ERP
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Change Summary */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+               <div className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700">
+                  <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><Target className="text-lime-400" /> Why This Works?</h4>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-lime-400/20 rounded flex items-center justify-center text-lime-400 text-xs shrink-0 mt-1">1</div>
+                      <p className="text-slate-300"><span className="text-white font-bold">กรองลูกค้าเร็ว:</span> ลดการออกไปหาลูกค้าที่ไม่ใช่กลุ่มเป้าหมาย (Non-qualify) ทำให้ทีม Sales มีเวลาโฟกัสงานใหญ่มากขึ้น</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-lime-400/20 rounded flex items-center justify-center text-lime-400 text-xs shrink-0 mt-1">2</div>
+                      <p className="text-slate-300"><span className="text-white font-bold">Hybrid Meetings:</span> การใช้ Online Meeting ในครั้งแรกช่วยลดเวลาการเดินทางและจัดคิวได้ง่ายขึ้นถึง 50%</p>
+                    </li>
+                  </ul>
+               </div>
+               <div className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700">
+                  <h4 className="text-xl font-bold mb-4 flex items-center gap-2"><Zap className="text-lime-400" /> Automation is Key</h4>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-lime-400/20 rounded flex items-center justify-center text-lime-400 text-xs shrink-0 mt-1">3</div>
+                      <p className="text-slate-300"><span className="text-white font-bold">BOQ Tool:</span> เปลี่ยนจาก "งานฝีมือ" ที่ต้องรอคิว เป็น "งานระบบ" ที่ใครก็คำนวณราคาเบื้องต้นได้ทันที</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-lime-400/20 rounded flex items-center justify-center text-lime-400 text-xs shrink-0 mt-1">4</div>
+                      <p className="text-slate-300"><span className="text-white font-bold">Momentum:</span> ยิ่งส่งใบเสนอราคาเร็ว โอกาสปิดการขายยิ่งสูง (Strike while the iron is hot)</p>
+                    </li>
+                  </ul>
+               </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer Branding */}
+      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-800 flex justify-between items-center text-slate-500">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-lime-400 rounded-lg" />
+          <span className="font-black text-xl text-white tracking-tighter">UPCYDE</span>
+        </div>
+        <div className="text-sm">Confidential Strategic Document 2024</div>
+      </div>
+    </div>
+  );
+};
+
+export default App;
